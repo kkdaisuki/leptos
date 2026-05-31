@@ -593,6 +593,13 @@ impl ToTokens for Model {
                 #prop_builder_fields
             }
 
+            #[allow(missing_docs)]
+            impl #impl_generics #props_name #generics #where_clause {
+              pub fn view(self) #ret {
+                #name(self)
+              }
+            }
+
             #props_serializer
 
             #[allow(missing_docs)]
