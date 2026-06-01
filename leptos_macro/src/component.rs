@@ -195,6 +195,26 @@ impl ToTokens for Model {
             && ((is_island_with_children && props.len() > 1)
                 || (!is_island_with_children && !props.is_empty()));
 
+        let props_view = if no_props {
+            quote! {
+                #[allow(missing_docs)]
+                impl #impl_generics #props_name #generics #where_clause {
+                    pub fn view() #ret {
+                        #name()
+                    }
+                }
+            }
+        } else {
+            quote! {
+                #[allow(missing_docs)]
+                impl #impl_generics #props_name #generics #where_clause {
+                    pub fn view(self) #ret {
+                        #name(self)
+                    }
+                }
+            }
+        };
+
         let prop_builder_fields =
             prop_builder_fields(vis, props, is_island_with_other_props);
         let props_serializer = if is_island_with_other_props {
@@ -593,12 +613,7 @@ impl ToTokens for Model {
                 #prop_builder_fields
             }
 
-            #[allow(missing_docs)]
-            impl #impl_generics #props_name #generics #where_clause {
-              pub fn view(self) #ret {
-                #name(self)
-              }
-            }
+            #props_view
 
             #props_serializer
 
