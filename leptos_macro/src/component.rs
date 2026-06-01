@@ -199,7 +199,7 @@ impl ToTokens for Model {
             quote! {
                 #[allow(missing_docs)]
                 impl #impl_generics #props_name #generics #where_clause {
-                    pub fn view() #ret {
+                    pub fn view(self) #ret {
                         #name()
                     }
                 }
